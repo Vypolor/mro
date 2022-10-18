@@ -175,7 +175,7 @@ if __name__ == '__main__':
         plt.scatter(X2[0][:], X2[1][:], c='red')
         show()
 
-        p1, p2 = probability_erroneous_classification(M1, M2, B)
+        p1, p2 = probability_erroneous_classification(M1, M2, B) #TODO chto eto
         p = p1 + p2
         print("1 вероятность ошибочной классификации: ", float(p1))
         print("2 вероятность ошибочной классификации: ", float(p2))
@@ -184,7 +184,7 @@ if __name__ == '__main__':
 
     def Neiman_Pearson(X, M1, M2, B, p0):  # страница 19 в самом конце формула.
         Y = np.array([0])
-        L = np.exp(-.5 * Mahalanobis(M1, M2, B) + np.sqrt(Mahalanobis(M1, M2, B)) * erfinv(1 - p0))
+        L = np.exp(-0.5 * Mahalanobis(M1, M2, B) + np.sqrt(Mahalanobis(M1, M2, B)) * erfinv(1 - p0))
 
         r = 1 / 2 * np.transpose(M1 + M2) * inv(np.matrix(B)) * (M1 - M2) + np.log(L)
         l1 = (np.transpose(M1 - M2) * inv(np.matrix(B)))[0, 0]
@@ -268,12 +268,15 @@ if __name__ == '__main__':
 
     def task_three(X1, X2, X3):
 
-        M1 = np.array([[1], [0]])
-        M2 = np.array([[-1], [1]])
-        M3 = np.array([[1], [-2]])
-        B1 = np.array([[0.5, 0.07], [0.07, 0.73]])
-        B2 = np.array([[0.1156, 0.0646], [0.0646, 0.5986]])
-        B3 = np.array([[0.0841, 0.1218], [0.1218, 0.6253]])
+        M1 = np.array([[-1], [1]])
+        M2 = np.array([[0], [-1]])
+        M3 = np.array([[1], [0]])
+        B1 = np.matrix(([0.1, 0],
+                        [0, 0.1]))
+        B2 = np.matrix(([0.25, 0.03]
+                        , [0.03, 0.25]))
+        B3 = np.matrix(([0.2, -0.2],
+                        [-0.2, 0.25]))
         X = np.linspace(-2, 2, 100)
 
         R1 = byesian_boundary_diff(X, M1, M2, B1, B2, 0.5, 0.5)
@@ -293,7 +296,7 @@ if __name__ == '__main__':
         plt.ylim([-2, 2])
         show()
 
-        p = probability_of_erroneous_classification(X1, M1, M3, B1, B3, 0.5, 0.5)
+        p = probability_of_erroneous_classification(X1, M1, M2, B1, B2, 0.5, 0.5)
         print("Вероятность ошибочной классификации: ", float(p))
         print("Относительная погрешность: ", math.sqrt((1 - float(p)) / (200 * float(p))))
         print("Объем обуч выборки: ", int((1 - float(p)) / (0.05 ** 2 * float(p))))
